@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "ap-south-1"
+  region = "us-west-2"
 }
 
 resource "aws_s3_bucket" "terraform_state" {
