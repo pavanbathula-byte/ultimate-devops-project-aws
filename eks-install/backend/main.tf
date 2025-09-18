@@ -57,6 +57,23 @@ resource "aws_iam_role_policy_attachment" "ec2_container_registry" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
+resource "aws_security_group_rule" "eks_nodes_to_cluster_https" {
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  security_group_id = aws_eks_cluster.eks.vpc_config[0].cluster_security_group_id
+  source_security_group_id = aws_eks_node_group.example.resources[0].resources[0].autoscaling_groups[0].security_group
+}
+
+resource "aws_security_group_rule" "eks_nodes_to_cluster_kubelet" {
+  type              = "ingress"
+  from_port         = 10250
+  to_port           = 10250
+  protocol          = "tcp"
+  security_group_id = aws_eks_cluster.eks.vpc_config[0].cluster_security_group_id
+  source_security_group_id = aws_eks_node_group.example.resources[0].resources[0].autoscaling_groups[0].security_group
+}
 
 # IAM role for EKS cluster
 resource "aws_iam_role" "eks_cluster_role" {
