@@ -22,6 +22,8 @@ resource "aws_eks_node_group" "example" {
     min_size     = 1
   }
 instance_types = ["t3.medium"] 
+# Use AL2023 for Kubernetes >= 1.33
+  ami_type = "AL2023_x86_64_STANDARD"
 version  = aws_eks_cluster.eks.version
 }
 
