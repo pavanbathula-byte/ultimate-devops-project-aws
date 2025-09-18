@@ -10,9 +10,7 @@ resource "aws_s3_bucket" "terraform_state" {
   }
 }
 
-provider "aws" {
-  region = "us-west-2"
-}
+
 
 # IAM role for EKS cluster
 resource "aws_iam_role" "eks_cluster_role" {
