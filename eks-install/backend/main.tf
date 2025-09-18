@@ -10,6 +10,18 @@ resource "aws_s3_bucket" "terraform_state" {
   }
 }
 
+resource "aws_eks_cluster" "eks" {
+  name     = "demo-eks-cluster"
+  role_arn = aws_iam_role.eks_cluster_role.arn
+
+  vpc_config {
+    subnet_ids = [
+      aws_subnet.public1.id,
+      aws_subnet.public2.id
+    ]
+  }
+}
+
 terraform {
   required_providers {
     aws = {
