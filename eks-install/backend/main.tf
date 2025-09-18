@@ -21,8 +21,8 @@ resource "aws_eks_node_group" "example" {
     max_size     = 3
     min_size     = 1
   }
- version  = aws_eks_cluster.eks.version
-  ami_type = "AL2_x86_64"
+instance_types = ["t3.medium"] 
+version  = aws_eks_cluster.eks.version
 }
 
 resource "aws_iam_role" "eks_node_role" {
