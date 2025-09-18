@@ -11,7 +11,7 @@ resource "aws_s3_bucket" "terraform_state" {
 }
 
 provider "aws" {
-  region = "ap-south-1"
+  region = "us-west-2"
 }
 
 # IAM role for EKS cluster
