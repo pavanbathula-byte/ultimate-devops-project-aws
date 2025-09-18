@@ -10,7 +10,18 @@ resource "aws_s3_bucket" "terraform_state" {
   }
 }
 
+resource "aws_eks_node_group" "example" {
+  cluster_name    = aws_eks_cluster.eks.name
+  node_group_name = "example-nodes"
+  node_role_arn   = aws_iam_role.eks_node_role.arn
+  subnet_ids      = [aws_subnet.public1.id, aws_subnet.public2.id]
 
+  scaling_config {
+    desired_size = 2
+    max_size     = 3
+    min_size     = 1
+  }
+}
 
 # IAM role for EKS cluster
 resource "aws_iam_role" "eks_cluster_role" {
