@@ -10,6 +10,24 @@ resource "aws_s3_bucket" "terraform_state" {
   }
 }
 
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+
+  backend "s3" {
+    bucket         = "demo-terraform-eks-state-s3-bucket-pavan-9814"
+    key            = "terraform.tfstate"
+    region         = "us-west-2"
+    dynamodb_table = "terraform-eks-state-locks"
+    encrypt        = true
+  }
+}
+
+
 resource "aws_s3_bucket_versioning" "terraform_state" {
   bucket = aws_s3_bucket.terraform_state.id
   versioning_configuration {
