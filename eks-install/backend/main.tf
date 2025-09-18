@@ -75,6 +75,28 @@ resource "aws_security_group_rule" "eks_nodes_to_cluster_kubelet" {
   source_security_group_id = aws_security_group.node_sg.id      # Node SG
 }
 
+# Security Group for EKS Cluster (control plane)
+resource "aws_security_group" "cluster_sg" {
+  name        = "eks-cluster-sg"
+  description = "Cluster communication with worker nodes"
+  vpc_id      = aws_vpc.main.id
+}
+
+# Security Group for Worker Nodes
+resource "aws_security_group" "node_sg" {
+  name        = "eks-nodes-sg"
+  description = "Worker nodes"
+  vpc_id      = aws_vpc.main.id
+
+  # Allow all outbound (nodes can talk to internet)
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 # IAM role for EKS cluster
 resource "aws_iam_role" "eks_cluster_role" {
   name = "eks-cluster-role"
