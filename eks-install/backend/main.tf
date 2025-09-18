@@ -22,9 +22,8 @@ resource "aws_eks_node_group" "example" {
     min_size     = 1
   }
 instance_types = ["t3.medium"] 
-# Use AL2023 for Kubernetes >= 1.33
-  ami_type = "AL2023_x86_64_STANDARD"
-version  = aws_eks_cluster.eks.version
+ami_type       = "AL2023_x86_64_STANDARD"
+  version        = "1.33"   # match cluster version
 }
 
 resource "aws_iam_role" "eks_node_role" {
@@ -90,6 +89,7 @@ resource "aws_iam_role_policy_attachment" "eks_service_policy" {
 resource "aws_eks_cluster" "eks" {
   name     = "demo-eks-cluster"
   role_arn = aws_iam_role.eks_cluster_role.arn
+ version  = "1.33"   # explicitly set
 
   vpc_config {
     subnet_ids = [
