@@ -23,7 +23,7 @@ resource "aws_eks_cluster" "eks" {
   enabled_cluster_log_types = ["api", "audit", "authenticator"]
 }
 
-resource "aws_eks_node_group" "example" {
+resource "aws_eks_node_group" "example_nodes_v2" {
   cluster_name    = aws_eks_cluster.eks.name
   node_group_name = "example-nodes"
   node_role_arn   = aws_iam_role.eks_node_role.arn
