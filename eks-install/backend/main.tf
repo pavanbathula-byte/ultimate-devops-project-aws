@@ -27,7 +27,7 @@ resource "aws_eks_node_group" "example_nodes_v2" {
   cluster_name    = aws_eks_cluster.eks.name
   node_group_name = "example-nodes"
   node_role_arn   = aws_iam_role.eks_node_role.arn
-  subnet_ids = [aws_subnet.public2.id]  # only public subnet
+ subnet_ids      = [aws_subnet.public1.id, aws_subnet.public2.id]  # both AZs
 
   scaling_config {
     desired_size = 2
@@ -177,13 +177,6 @@ resource "aws_route_table_association" "public1" {
 resource "aws_route_table_association" "public2" {
   subnet_id      = aws_subnet.public2.id
   route_table_id = aws_route_table.public.id
-}
-
-resource "aws_eks_node_group" "example" {
-  ...
-  resources {
-    security_group_ids = [aws_security_group.node_sg.id]
-  }
 }
 
 terraform {
