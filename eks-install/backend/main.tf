@@ -10,11 +10,23 @@ resource "aws_s3_bucket" "terraform_state" {
   }
 }
 
+resource "aws_eks_cluster" "eks" {
+  name     = "demo-eks-cluster"
+  role_arn = aws_iam_role.eks_cluster_role.arn
+
+  vpc_config {
+    subnet_ids = [aws_subnet.public2.id]  # only public subnet with IGW
+  }
+
+  # Optional: enable logging
+  enabled_cluster_log_types = ["api", "audit", "authenticator"]
+}
+
 resource "aws_eks_node_group" "example" {
   cluster_name    = aws_eks_cluster.eks.name
   node_group_name = "example-nodes"
   node_role_arn   = aws_iam_role.eks_node_role.arn
-  subnet_ids      = [aws_subnet.public1.id, aws_subnet.public2.id]
+  subnet_ids = [aws_subnet.public2.id]  # only public subnet
 
   scaling_config {
     desired_size = 2
@@ -23,7 +35,7 @@ resource "aws_eks_node_group" "example" {
   }
 instance_types = ["t3.medium"] 
 ami_type       = "AL2023_x86_64_STANDARD"
-  version        = "1.33"   # match cluster version
+  version        = aws_eks_cluster.eks.version
 }
 
 resource "aws_iam_role" "eks_node_role" {
@@ -41,7 +53,6 @@ resource "aws_iam_role" "eks_node_role" {
   })
 }
 
-subnet_ids = [aws_subnet.public2.id]
 
 # Attach required managed policies
 resource "aws_iam_role_policy_attachment" "eks_worker_node" {
