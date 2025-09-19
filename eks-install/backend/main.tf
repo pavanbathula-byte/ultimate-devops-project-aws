@@ -15,7 +15,8 @@ resource "aws_eks_cluster" "eks" {
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
-    subnet_ids = [aws_subnet.public2.id]  # only public subnet with IGW
+      subnet_ids         = [aws_subnet.public1.id, aws_subnet.public2.id]  # both subnets in different AZs
+    security_group_ids = [aws_security_group.cluster_sg.id]
   }
 
   # Optional: enable logging
