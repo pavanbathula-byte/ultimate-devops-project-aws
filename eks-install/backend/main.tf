@@ -41,6 +41,8 @@ resource "aws_iam_role" "eks_node_role" {
   })
 }
 
+subnet_ids = [aws_subnet.public2.id]
+
 # Attach required managed policies
 resource "aws_iam_role_policy_attachment" "eks_worker_node" {
   role       = aws_iam_role.eks_node_role.name
