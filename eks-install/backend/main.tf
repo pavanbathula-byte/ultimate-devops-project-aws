@@ -137,19 +137,6 @@ resource "aws_iam_role_policy_attachment" "eks_service_policy" {
   role       = aws_iam_role.eks_cluster_role.name
 }
 
-# EKS Cluster
-resource "aws_eks_cluster" "eks" {
-  name     = "demo-eks-cluster"
-  role_arn = aws_iam_role.eks_cluster_role.arn
- version  = "1.33"   # explicitly set
-
-  vpc_config {
-    subnet_ids = [
-      aws_subnet.public1.id,
-      aws_subnet.public2.id
-    ]
-  }
-}
 
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
